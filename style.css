@@ -1,0 +1,521 @@
+/* =========================================================================
+   1. GLOBAL SYSTEM VARIABLES & ROOT STYLES
+   ========================================================================= */
+:root {
+    --bg-main: #0c0f12;
+    --bg-surface: #171c22;
+    --primary: #38bdf8;       /* Soothing Sky Blue */
+    --success: #10b981;       /* Low energy grounding green */
+    --warning: #f59e0b;       /* Soft Amber */
+    --error: #ef4444;         /* Soft Red */
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    line-height: 1.5;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px; /* Perfectly structured mobile shell */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 80px; /* Buffer room for absolute safety button */
+}
+
+/* =========================================================================
+   2. REUSABLE ATOM COMPONENT SHELLS (CARDS, BUTTONS, BADGES)
+   ========================================================================= */
+.card {
+    background-color: var(--bg-surface);
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: 2px;
+    margin-bottom: 12px;
+}
+
+.guide-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+/* Form Fields */
+textarea, select, input[type="text"], input[type="datetime-local"], input[type="time"] {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+textarea:focus, select:focus, input:focus {
+    border-color: var(--primary);
+}
+
+textarea {
+    resize: none;
+    height: 90px;
+}
+
+/* Buttons */
+button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    width: 100%;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.primary-btn {
+    background-color: var(--primary);
+    color: #030712;
+    margin-top: 8px;
+}
+
+.secondary-btn {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 16px 0;
+}
+
+/* Structured List Rows */
+.item-strip-row {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    margin-top: 6px;
+}
+
+.item-strip-row.done {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Range Sliders */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+}
+
+/* Quote Box Highlights */
+.quote-accent-box {
+    background: rgba(56, 189, 248, 0.04);
+    border-left: 3px solid var(--primary);
+    padding: 12px;
+    border-radius: 0 10px 10px 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+/* =========================================================================
+   3. HEADER & HABIT EXPERENTIAL LOGS
+   ========================================================================= */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.app-header h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+.app-header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.ecosystem-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+}
+
+#oasis-spirit {
+    font-size: 1.8rem;
+    user-select: none;
+}
+
+.xp-bar-wrapper {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+#xp-fill-line {
+    background: linear-gradient(90deg, var(--success), var(--primary));
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkin-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.checkin-row label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* =========================================================================
+   4. INTERACTIVE NAVIGATION GRID SYSTEM
+   ========================================================================= */
+.navigation-grid {
+    display: grid;
+    gap: 6px;
+}
+
+.nav-tile {
+    background-color: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 10px 4px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.nav-tile.active {
+    background-color: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    border-color: rgba(56, 189, 248, 0.2);
+}
+
+/* =========================================================================
+   5. VIEW PANEL AND ARCHETYPE COMPONENTS
+   ========================================================================= */
+.view-panel {
+    display: none;
+    animation: fadeInView 0.25s ease-out forwards;
+}
+
+.view-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@keyframes fadeInView {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Thought Router Branch Forks */
+.fork-options {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.fork-btn {
+    font-size: 0.8rem;
+    padding: 10px;
+}
+
+.fork-btn.mdd-theme { background: rgba(16, 185, 129, 0.12); color: var(--success); }
+.fork-btn.ocd-theme { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+
+.hidden-sub-card {
+    display: none;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+    margin-top: 4px;
+    animation: fadeInView 0.2s ease-out;
+}
+
+/* ERP Lab Stopwatch Elements */
+.hierarchy-builder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+#erp-coach-timer-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+#erp-stopwatch {
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+#erp-anchor-reminder {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    max-width: 280px;
+    margin: 0 auto 14px auto;
+    line-height: 1.4;
+}
+
+/* =========================================================================
+   6. COPING SUB-SYSTEMS & DEAFENING ANIMATIONS
+   ========================================================================= */
+.toolbox-toggle-row {
+    display: flex;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.toolbox-toggle-row button {
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 8px;
+}
+
+.tool-deck-item {
+    display: none;
+    background: var(--bg-surface);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 4px;
+}
+
+.tool-deck-item.active-tool {
+    display: block;
+}
+
+.center-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+/* Breathing Engine Visual Ring Element */
+.breathing-circle-avatar {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(56,189,248,0.4) 0%, rgba(56,189,248,0.05) 70%);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    margin: 30px auto;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    animation: anchorBreatheCycle 8s infinite ease-in-out;
+}
+
+@keyframes anchorBreatheCycle {
+    0%, 100% { transform: scale(0.8); background-color: rgba(56,189,248,0.1); }
+    50% { transform: scale(1.6); background-color: rgba(56,189,248,0.4); box-shadow: 0 0 50px rgba(56, 189, 248, 0.5); }
+}
+
+.sensory-checklist {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.sensory-checklist li {
+    background: rgba(0,0,0,0.15);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border-left: 3px solid var(--text-muted);
+}
+
+/* =========================================================================
+   7. DASHBOARD DATA BAR GRAPHS
+   ========================================================================= */
+.dashboard-chart-frame {
+    height: 130px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    margin-top: 4px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 14px 20px;
+    gap: 12px;
+}
+
+.chart-bar-pillar {
+    width: 24px;
+    background-color: var(--primary);
+    border-radius: 4px 4px 0 0;
+    height: 0%; /* Populated dynamically by javascript controller hooks */
+    transition: height 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* =========================================================================
+   8. INTERCEPTIVE CRISIS SAFETY CORE MODULE
+   ========================================================================= */
+.app-footer-safety {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(12,15,18,0) 0%, var(--bg-main) 40%);
+    z-index: 99;
+}
+
+.safety-trigger {
+    background-color: var(--error);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+/* Absolute Screen Overlay Curtain */
+.modal-layer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(3, 7, 18, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInView 0.2s ease-out;
+}
+
+.modal-window-content {
+    background-color: var(--bg-surface);
+    width: 100%;
+    max-width: 420px;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.modal-window-content h3 {
+    color: var(--error);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.safety-card-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.safety-card-item strong {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.safety-card-item p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}

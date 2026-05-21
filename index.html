@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis Sanctuary MVP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- HEADER & ECOSYSTEM -->
+        <header class="app-header">
+            <h2>Oasis Sanctuary</h2>
+            <p id="current-date-string"></p>
+        </header>
+
+        <section class="card ecosystem-card">
+            <div id="oasis-spirit">🌱</div>
+            <div class="xp-bar-wrapper">
+                <div id="xp-fill-line"></div>
+            </div>
+            <p><span id="xp-score-text">0</span> XP (Total Progress)</p>
+        </section>
+
+        <!-- DYNAMIC CHECK-IN BLOCK -->
+        <section id="daily-checkin-zone" class="card checkin-card">
+            <h3>Quick Check-In</h3>
+            <p class="subtitle">Meet yourself where you are right now.</p>
+            
+            <div class="checkin-row">
+                <label>Energy Level:</label>
+                <input type="range" id="checkin-energy" min="10" max="100" value="50" step="10">
+            </div>
+            <div class="checkin-row">
+                <label>Mood State:</label>
+                <select id="checkin-mood">
+                    <option value="Heavy">Heavy / Low</option>
+                    <option value="Anxious">Anxious / Restless</option>
+                    <option value="Flat">Flat / Numb</option>
+                    <option value="Stable">Stable / Peaceful</option>
+                </select>
+            </div>
+            <div class="checkin-row">
+                <label>OCD Urge Intensity:</label>
+                <input type="range" id="checkin-ocd" min="0" max="10" value="3">
+            </div>
+            <button class="primary-btn" onclick="submitDailyCheckIn()">Log State</button>
+        </section>
+
+        <!-- NAVIGATION MOSAIC -->
+        <nav class="navigation-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <button class="nav-tile active" onclick="navigateOasis('routines')">Routines</button>
+            <button class="nav-tile" onclick="navigateOasis('cbt')">Thoughts</button>
+            <button class="nav-tile" onclick="navigateOasis('exposures')">ERP Lab</button>
+            <button class="nav-tile" onclick="navigateOasis('toolbox')">Coping</button>
+            <button class="nav-tile" onclick="navigateOasis('audio')">Audio</button>
+            <button class="nav-tile" onclick="navigateOasis('care')">Care</button>
+            <button class="nav-tile" onclick="navigateOasis('community')">Circle</button>
+            <button class="nav-tile" onclick="navigateOasis('journal')">Journal</button>
+            <button class="nav-tile" onclick="navigateOasis('dashboard')" style="grid-column: span 4;">Charts & Insights</button>
+        </nav>
+
+        <!-- PANEL 1: HABIT & ROUTINE BUILDER -->
+        <div id="panel-routines" class="view-panel active">
+            <h3>Adaptive Routine Builder</h3>
+            <p class="subtitle">Small, realistic goals that adapt to your morning check-in state.</p>
+            <div id="adaptive-habits-container"></div>
+        </div>
+
+        <!-- PANEL 2: THOUGHT RECORD TOOL -->
+        <div id="panel-cbt" class="view-panel">
+            <h3>CBT Thought Navigator</h3>
+            <textarea id="raw-thought-box" placeholder="What thought is running on loop?"></textarea>
+            <div class="fork-options">
+                <button class="fork-btn mdd-theme" onclick="routeThoughtProcess('mdd')">Heavy / Hopeless</button>
+                <button class="fork-btn ocd-theme" onclick="routeThoughtProcess('ocd')">Sticky / 'What-If' Loop</button>
+            </div>
+            
+            <div id="cbt-mdd-form" class="hidden-sub-card">
+                <p class="guide-text">Identify distortion (All-or-Nothing, Mind Reading). Let's write down a balanced perspective:</p>
+                <textarea id="mdd-balanced-input" placeholder="Is there another softer explanation?"></textarea>
+                <button class="primary-btn" onclick="finalizeCBTLog('Reframed distortion')">Save Reframe</button>
+            </div>
+
+            <div id="cbt-ocd-form" class="hidden-sub-card">
+                <p class="guide-text">Defusion Strategy: Do not fight or reply. Read this statement out loud:</p>
+                <div id="ocd-defusion-text" class="quote-accent-box"></div>
+                <button class="primary-btn" onclick="finalizeCBTLog('Disengaged from loop')">Acknowledge & Move On</button>
+            </div>
+        </div>
+
+        <!-- PANEL 3: OCD-SPECIFIC ERP EXPOSURES -->
+        <div id="panel-exposures" class="view-panel">
+            <h3>ERP Hierarchy Lab</h3>
+            <div class="hierarchy-builder">
+                <input type="text" id="erp-exposure-title" placeholder="e.g., Touching doorknob without washing">
+                <select id="erp-difficulty-level">
+                    <option value="Low Challenge">Low Challenge</option>
+                    <option value="Moderate Discomfort">Moderate Discomfort</option>
+                    <option value="High Challenge">High Challenge</option>
+                </select>
+                <button class="secondary-btn" onclick="addExposureToHierarchy()">Add to Hierarchy</button>
+            </div>
+            
+            <div id="erp-hierarchy-stack"></div>
+
+            <hr class="divider">
+
+            <h3>Urge Delay Coach</h3>
+            <div id="erp-coach-timer-box">
+                <div id="erp-stopwatch">00:00</div>
+                <p id="erp-anchor-reminder">Click start below to ride out the anxiety wave without performing your compulsion.</p>
+                <button id="erp-master-toggle-btn" class="primary-btn" onclick="toggleERPStopwatch()">Start Delay Timer</button>
+            </div>
+        </div>
+
+        <!-- PANEL 4: GROUNDING & COPING TOOLBOX -->
+        <div id="panel-toolbox" class="view-panel">
+            <h3>Coping & Grounding Deck</h3>
+            
+            <div class="toolbox-toggle-row">
+                <button onclick="activateGroundingTool('breathe')">Paced Breath</button>
+                <button onclick="activateGroundingTool('54321')">5-4-3-2-1 Sensory</button>
+            </div>
+
+            <div id="tool-breathe-box" class="tool-deck-item active-tool">
+                <p class="center-text">Follow the rhythm of the pulsing anchor circle below.</p>
+                <div class="breathing-circle-avatar"></div>
+            </div>
+
+            <div id="tool-54321-box" class="tool-deck-item">
+                <p class="guide-text">Focus your mind entirely on your physical surroundings right now:</p>
+                <ul class="sensory-checklist">
+                    <li>👀 Name <strong>5 items</strong> you see around the room.</li>
+                    <li>🖐️ Notice <strong>4 physical sensations</strong> (e.g., clothes on skin, chair beneath you).</li>
+                    <li>👂 Identify <strong>3 distinct sounds</strong> around you.</li>
+                    <li>👃 Identify <strong>2 scents</strong> you can smell.</li>
+                    <li>👅 Name <strong>1 positive thing</strong> you can taste.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PANEL 5: GUIDED AUDIO EXERCISES -->
+        <div id="panel-audio" class="view-panel">
+            <h3>Guided Audio Sanctuary</h3>
+            <p class="subtitle">Short, grounding audio spaces for high-distress moments.</p>
+            
+            <div class="item-strip-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🌊 Emergency Defusion Drop</strong>
+                    <span class="badge" style="background: rgba(56,189,248,0.2); color: var(--primary);">5 Min</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">An anchor audio to help unhook from a spiking OCD intrusive loop.</p>
+                <audio controls style="width: 100%; margin-top: 4px;">
+                    <source src="audio/defusion_anchor.mp3" type="audio/mpeg">
+                    Your web browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div class="item-strip-row" style="flex-direction: column; align-items: stretch; gap: 8px; margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🍃 Low-Energy Body Scan</strong>
+                    <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--success);">10 Min</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">A gentle somatic meditation tailored for heavy depressive states.</p>
+                <audio controls style="width: 100%; margin-top: 4px;">
+                    <source src="audio/body_scan.mp3" type="audio/mpeg">
+                    Your web browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+
+        <!-- PANEL 6: MEDICATION & APPOINTMENT TRACKER -->
+        <div id="panel-care" class="view-panel">
+            <h3>Care Tracker</h3>
+            <p class="subtitle">Manage routines effortlessly with zero pressure.</p>
+            
+            <div style="margin-top: 12px;">
+                <h4 style="font-size:0.9rem; margin-bottom:6px; color:var(--primary);">💊 Medication Baseline</h4>
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="care-med-name" placeholder="e.g., Sertraline 50mg" style="flex: 2;">
+                    <input type="time" id="care-med-time" style="flex: 1;">
+                    <button class="primary-btn" style="width: auto; margin-top: 0; padding: 0 14px;" onclick="addMedicationReminder()">Add</button>
+                </div>
+                <div id="med-reminders-list-hook" style="margin-top: 8px;"></div>
+            </div>
+
+            <hr class="divider">
+
+            <div style="margin-top: 12px;">
+                <h4 style="font-size:0.9rem; margin-bottom:6px; color:var(--warning);">📅 Support Appointments</h4>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <input type="text" id="care-appt-name" placeholder="e.g., Therapy session w/ Dr. Clara">
+                    <input type="datetime-local" id="care-appt-date">
+                    <button class="primary-btn" style="background: var(--warning);" onclick="addAppointmentSchedule()">Log Appointment</button>
+                </div>
+                <div id="appt-schedule-list-hook" style="margin-top: 8px;"></div>
+            </div>
+        </div>
+
+        <!-- PANEL 7: MODERATED COMMUNITY CIRCLE -->
+        <div id="panel-community" class="view-panel">
+            <h3>The Oasis Circle</h3>
+            <p class="subtitle">🛡️ Peer support space. Completely anonymous & moderated.</p>
+            
+            <div class="quote-accent-box" style="border-left-color: var(--primary); color: var(--text-primary); margin-bottom:12px;">
+                <small style="color: var(--primary); font-weight: bold; display:block; margin-bottom:4px;">✨ Circle Guidelines</small>
+                No reassurance seeking for OCD loops, no medical advice. Just shared presence through tough days.
+            </div>
+
+            <div class="circle-feed" style="display:flex; flex-direction:column; gap:8px;">
+                <div class="item-strip-row" style="flex-direction:column; align-items:flex-start; background: rgba(255,255,255,0.02);">
+                    <div style="display:flex; justify-content:space-between; width:100%; font-size:0.75rem; color:var(--text-secondary);">
+                        <span>👤 Anonymous Teal</span>
+                        <span>2h ago</span>
+                    </div>
+                    <p style="font-size:0.85rem; margin-top:4px;">Rode out a massive handwashing urge using the 5-minute delay timer today. It hit an 8 intensity but dropped to a 3. Progress feels slow but real.</p>
+                </div>
+
+                <div class="item-strip-row" style="flex-direction:column; align-items:flex-start; background: rgba(255,255,255,0.02);">
+                    <div style="display:flex; justify-content:space-between; width:100%; font-size:0.75rem; color:var(--text-secondary);">
+                        <span>👤 Anonymous Willow</span>
+                        <span>4h ago</span>
+                    </div>
+                    <p style="font-size:0.85rem; margin-top:4px;">Woke up feeling incredibly heavy. Used the low-energy routine to just rinse my mouth and step outside. Grateful for small targets.</p>
+                </div>
+            </div>
+
+            <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.05);">
+                <textarea id="community-post-text" placeholder="Share a micro-win or reflection with the circle..."></textarea>
+                <button class="secondary-btn" onclick="alert('In the final app, this message will pass anonymously through a moderation filter before posting!')">Share with Circle</button>
+            </div>
+        </div>
+
+        <!-- PANEL 8: JOURNAL & TAILORED PROMPTS -->
+        <div id="panel-journal" class="view-panel">
+            <h3>Sanctuary Logs</h3>
+            <label>Select a Soothing Writing Prompt:</label>
+            <select id="journal-prompt-dropdown" onchange="applyJournalPrompt()">
+                <option value="None">Blank Canvas (Free Write)</option>
+                <option value="What is one tiny physical thing that brought a moment of relief today?">Relief Points</option>
+                <option value="If your low mood could rest safely without you feeling guilty about it, what would you do right now?">Permission to Rest</option>
+                <option value="Write down an intrusive worry, then describe what it looks like as an object outside your body.">Objectifying the Intruding Thought</option>
+            </select>
+            <textarea id="journal-body-text" style="height: 180px;" placeholder="Start writing here..."></textarea>
+            <button class="primary-btn" onclick="saveJournalEntry()">Save Entry</button>
+            <div id="saved-journal-logs-list"></div>
+        </div>
+
+        <!-- PANEL 9: PROGRESS & SYMPTOM PATTERNS DASHBOARD -->
+        <div id="panel-dashboard" class="view-panel">
+            <h3>Symptom & Trend Insights</h3>
+            <p class="subtitle">A soft look at your recent logs over time.</p>
+            
+            <div class="dashboard-chart-frame">
+                <div id="chart-bars-hook"></div>
+            </div>
+            <p class="center-text" style="margin-bottom:14px;"><small style="color:var(--text-muted)">Bars represent historical tracked energy states.</small></p>
+
+            <div class="card" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px;">
+                <h4 style="font-size:0.9rem; margin-bottom:8px; color: var(--primary);">🧠 Pattern & Trigger Detection</h4>
+                <ul style="font-size:0.8rem; color: var(--text-secondary); padding-left:16px; display:flex; flex-direction:column; gap:6px;">
+                    <li>📉 When **OCD Urge Intensity** registers above a score of 7, your logged energy routinely experiences a downward shift over the subsequent 24 hours.</li>
+                    <li>🌱 Completing at least **2 micro-routines** during a low energy check-in correlates with a 20% elevation in reported stable mood the following morning.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SAFETY STRATEGY FOOTER -->
+        <footer class="app-footer-safety">
+            <button class="safety-trigger" onclick="toggleSafetyModal(true)">🚨 Emergency Safety Blueprint</button>
+        </footer>
+
+        <!-- CRISIS MODAL OVERLAY -->
+        <div id="safety-modal-overlay" class="modal-layer">
+            <div class="modal-window-content">
+                <h3>Your Safety Anchor</h3>
+                <div class="safety-card-item">
+                    <strong>1. Immediate Grounding Action:</strong>
+                    <p>Submerge your face in ice-cold water or grip an ice cube firmly to snap executive function focus back online.</p>
+                </div>
+                <div class="safety-card-item">
+                    <strong>2. Trusted Supporter Link:</strong>
+                    <p>Send your preset status update to a trusted peer contact or professional care provider.</p>
+                </div>
+                <div class="safety-card-item">
+                    <strong>3. 24/7 Professional Lifeline:</strong>
+                    <p>Call or Text <strong>988</strong> immediately. It is completely confidential, zero cost, and always open.</p>
+                </div>
+                <button class="primary-btn" style="background:#fff; color:#000;" onclick="toggleSafetyModal(false)">Return to Sanctuary</button>
+            </div>
+        </div>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
